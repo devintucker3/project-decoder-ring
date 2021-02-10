@@ -8,6 +8,33 @@ const substitutionModule = (function () {
 
   function substitution(input, alphabet, encode = true) {
     // your solution code here
+    if (!input || !alphabet || alphabet.length !== 26) return false;
+    //make sure to there is no duplicates
+    for (let i = 0; i < alphabet.length; i++) {
+      for (let j = i + 1; j < alphabet.length; j++) {
+        if (alphabet[i] === alphabet[j]) {
+          return false
+        }
+      }
+    }
+    let theRealAlphabet = "abcdefghijklmnopqrstuvwxyz";
+
+    
+    let cypher = [];
+    if (encode) {
+      for (let i = 0; i < 26; i++) {
+        cypher[theRealAlphabet[i]] =  alphabet[i]
+      }
+    } else {
+      for (let i = 0; i < 26; i++) {
+        cypher[alphabet[i]] =  theRealAlphabet[i]
+      }
+    }
+    let result = input.toLowerCase().split("").map(element => {
+      if (element === " ") return " "
+      return cypher[element];
+    })
+    return result.join("");
   }
 
   return {

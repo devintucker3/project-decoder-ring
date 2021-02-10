@@ -3,12 +3,73 @@
 // Only add code (e.g., helper methods, variables, etc.) within the scope
 // of the anonymous function on line 6
 
+/*
+The letters "I" and "J" share a space. When encoding, both letters can be 
+ converted to 42, but when decoding, both letters should somehow be shown.
+ */
+const alphabetEncoding = {
+  "a": "11", "b": "21", "c": "31", "d": "41", "e": "51", "f": "12", "g": "22",
+  "h": "32", "i": "42", "j": "42", "k": "52", "l": "13", "m": "23", "n": "33", "o": "43",
+  "p": "53", "q": "14", "r": "24", "s": "34", "t": "44", "u": "54", "v": "15", "w": "25",
+  "x": "35","y": "45","z": "55"
+};
+
+const numberDecoding = {
+  11: "a", 21: "b", 31: "c", 41: "d", 51: "e", 12: "f", 22: "g",
+  32: "h", 42: "i/j", 52: "k", 13: "l", 23: "m", 33: "n", 43: "o",
+  53: "p", 14: "q", 24: "r", 34: "s", 44: "t", 54: "u", 15: "v",
+  25: "w", 35: "x", 45: "y", 55: "z"
+};
+
+
 const polybiusModule = (function () {
   // you can add any code you want within this function scope
 
   function polybius(input, encode = true) {
     // your solution code here
+    if (encode) {
+      let lowerCase = input.toLowerCase();
+      let result = [...lowerCase].map((element) => {
+        const charCoded = element.charCodeAt();
+        // when character is anything other than lower case alphabet
+        if (charCoded < 97 || charCoded > 122) return String.fromCharCode(charCoded);
+        //return value of key that matches letter
+        if (charCoded >= 97 && charCoded<= 122) {
+          letter = String.fromCharCode(charCoded);
+          return alphabetEncoding[letter];
+        }
+      });
+      return result.join("");
+    } else {
+      // return false if input.length is odd
+      if (Math.abs(input.split(" ").join("").length % 2) == 1) return false
+      
+      let arr = [];
+      
+      for (let i = 0; i < input.length; i = i + 2) {
+        let evenIndex = input[i];
+        let oddIndex = input[i + 1];
+        // return a space if already a space
+        if (evenIndex === " ") {
+          i--;
+          arr.push(" ");
+        } else {
+          //return value of key that matches number
+          let key = `${evenIndex}${oddIndex}`;
+          let numbertoLetter = numberDecoding[key];
+          arr.push(numbertoLetter);
+        }
+        
+      }
+      return arr.join("")
+    }
   }
+
+    //When encoding, your output should still be a string.
+
+    /*When decoding, the number of characters in the string excluding spaces 
+    should be even. Otherwise, return false.*/
+  
 
   return {
     polybius,
